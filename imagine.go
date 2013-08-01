@@ -1,10 +1,10 @@
 package main
 
 import (
-	"bitbucket.org/chdorner/imagine/server"
 	_ "expvar"
 	"flag"
 	"fmt"
+	"github.com/chdorner/imagine/server"
 	"log"
 	"os"
 	"os/signal"
