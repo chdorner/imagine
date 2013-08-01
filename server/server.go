@@ -1,8 +1,8 @@
 package server
 
 import (
-	"net/http"
 	"log"
+	"net/http"
 )
 
 func ListenAndServe(addr string) error {
