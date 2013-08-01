@@ -1,45 +1,17 @@
 package server
 
 import (
-	"errors"
 	"log"
 	"net/http"
-	"net/url"
-	"strconv"
+	"github.com/chdorner/imagine/instructions"
 )
 
-type RequestInstructions struct {
-	Origin string
-	Action string
-	Format string
-	Width  int
-	Height int
-}
-
 func processHandler(w http.ResponseWriter, r *http.Request) {
-	instructions := parseInstructions(r.URL.Query())
-	log.Println(instructions)
-}
-
-func parseInstructions(p url.Values) *RequestInstructions {
-	var err error
-
-	i := &RequestInstructions{}
-	i.Origin, _ = url.QueryUnescape(p.Get("origin"))
-	i.Action = p.Get("action")
-	i.Format = p.Get("format")
-
-	i.Width, err = strconv.Atoi(p.Get("width"))
+	instr, err := instructions.ParseInstructions(r.URL.Query())
 	if err != nil {
-		err = &httpError{errors.New("width is not an integer"), http.StatusBadRequest}
-		panic(err)
+		httpErr := &httpError{err, http.StatusBadRequest}
+		panic(httpErr)
 	}
 
-	i.Height, err = strconv.Atoi(p.Get("height"))
-	if err != nil {
-		err = &httpError{errors.New("height is not an integer"), http.StatusBadRequest}
-		panic(err)
-	}
-
-	return i
+	log.Println(instr)
 }
