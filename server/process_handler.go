@@ -25,7 +25,7 @@ func parseInstructions(p url.Values) *RequestInstructions {
 	var err error
 
 	i := &RequestInstructions{}
-	i.Origin = p.Get("origin")
+	i.Origin, _ = url.QueryUnescape(p.Get("origin"))
 	i.Action = p.Get("action")
 	i.Format = p.Get("format")
 
