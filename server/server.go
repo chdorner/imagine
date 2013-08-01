@@ -41,6 +41,7 @@ func baseHandler(f func(http.ResponseWriter, *http.Request)) http.HandlerFunc {
 
 func ListenAndServe(addr string) error {
 	http.Handle("/status", baseHandler(statusHandler))
+	http.Handle("/", baseHandler(processHandler))
 
 	log.Printf("server listening on %s..", addr)
 	return http.ListenAndServe(addr, nil)
