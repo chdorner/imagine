@@ -13,3 +13,4 @@ $(TARGET):
 	go build -o $(TARGET) $(LDFLAGS)
 
 .PHONY: $(TARGET)
+.PHONY: test
