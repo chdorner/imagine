@@ -24,7 +24,13 @@ func TestLoad(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	actual, err := Load(srv.URL + "/image.jpg")
+	reader, err := Load(srv.URL + "/image.jpg")
+	defer reader.Close()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	actual, err := ioutil.ReadAll(reader)
 	if err != nil {
 		t.Fatal(err)
 	}

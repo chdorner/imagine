@@ -1,20 +1,15 @@
 package loader
 
 import (
-	"io/ioutil"
+	"io"
 	"net/http"
 )
 
-func Load(url string) ([]byte, error) {
+func Load(url string) (io.ReadCloser, error) {
 	resp, err := http.Get(url)
 	if err != nil {
 		return nil, err
 	}
 
-	data, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return nil, err
-	}
-
-	return data, nil
+	return resp.Body, nil
 }
