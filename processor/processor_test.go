@@ -3,6 +3,7 @@ package processor
 import (
 	"bytes"
 	"github.com/chdorner/imagine/instructions"
+	"github.com/gosexy/canvas"
 	"io/ioutil"
 	"os"
 	"testing"
@@ -24,18 +25,20 @@ func TestProcessCrop(t *testing.T) {
 	b := bytes.NewBuffer(nil)
 	p.Process(f, b)
 
-	actual, err := ioutil.ReadAll(b)
+	data, err := ioutil.ReadAll(b)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	expected, err := ioutil.ReadFile("../test/expected_crop.jpg")
+	actual := canvas.New()
+	err = actual.OpenBlob(data, uint(len(data)))
 	if err != nil {
 		t.Fatal(err)
 	}
+	defer actual.Destroy()
 
-	if !bytes.Equal(actual, expected) {
-		ioutil.WriteFile("../actual_crop.jpg", actual, 0664)
-		t.Fatal("cropped image is not as expected, got actual_crop.jpg expected test/expected_crop.jpg")
+	if actual.Width() != 300 || actual.Height() != 300 {
+		t.Fatalf("cropped image is not as expected, got: %dx%d", actual.Width(), actual.Height())
+	}
 	}
 }
