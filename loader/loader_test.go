@@ -1,13 +1,13 @@
 package loader
 
 import (
+	"bytes"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"os"
 	"path/filepath"
 	"testing"
-	"bytes"
 )
 
 func TestLoad(t *testing.T) {

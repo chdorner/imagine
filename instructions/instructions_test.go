@@ -1,8 +1,8 @@
 package instructions
 
 import (
-	"testing"
 	"net/url"
+	"testing"
 )
 
 func TestParseInstrunctions(t *testing.T) {
