@@ -28,11 +28,13 @@ func (p *Processor) Process(r io.Reader, w io.Writer) error {
 	if err != nil {
 		return err
 	}
-
 	defer p.image.Destroy()
 
-	if p.instr.Action == "crop" {
+	switch p.instr.Action {
+	case "crop":
 		p.crop()
+	case "shrink-w":
+		p.shrinkWidth()
 	}
 
 	data, err = p.image.GetImageBlob()
@@ -62,4 +64,17 @@ func (p *Processor) crop() {
 	ny := int(p.image.Height()/2) - int(nhf/2)
 
 	p.image.Crop(nx, ny, uint(p.instr.Width), uint(p.instr.Height))
+}
+
+func (p *Processor) shrinkWidth() {
+	scale := float64(p.instr.Width) / float64(p.image.Width())
+
+	if scale > 1 {
+		return
+	}
+
+	nw := uint(p.instr.Width)
+	nh := uint(scale * float64(p.image.Height()))
+
+	p.image.Resize(nw, nh)
 }
