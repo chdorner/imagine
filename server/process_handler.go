@@ -1,9 +1,10 @@
 package server
 
 import (
-	"log"
-	"net/http"
 	"github.com/chdorner/imagine/instructions"
+	"github.com/chdorner/imagine/loader"
+	"github.com/chdorner/imagine/processor"
+	"net/http"
 )
 
 func processHandler(w http.ResponseWriter, r *http.Request) {
@@ -13,5 +14,10 @@ func processHandler(w http.ResponseWriter, r *http.Request) {
 		panic(httpErr)
 	}
 
-	log.Println(instr)
+	p := processor.NewProcessor(instr)
+
+	originReader, _ := loader.Load(instr.Origin)
+	defer originReader.Close()
+
+	p.Process(originReader, w)
 }
