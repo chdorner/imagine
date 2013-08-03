@@ -2,7 +2,8 @@
 
 VERSION := 0.1.0
 TARGET  := imagine
-LDFLAGS := -ldflags "-X main.Version $(VERSION)"
+REPO    := github.com/chdorner/imagine
+LDFLAGS := -ldflags "-X $(REPO)/server.Version $(VERSION)"
 
 build: $(TARGET)
 

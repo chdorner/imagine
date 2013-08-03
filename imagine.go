@@ -11,9 +11,6 @@ import (
 	"syscall"
 )
 
-// Set *automatically* at build time
-var Version string
-
 var (
 	addr    = flag.String("a", ":8080", "address to bind to")
 	daddr   = flag.String("debug.a", ":8081", "address to bind to for debug information")
@@ -22,7 +19,7 @@ var (
 
 func main() {
 	if *version {
-		fmt.Println(Version)
+		fmt.Println(server.Version)
 		os.Exit(0)
 	}
 	sigch := make(chan os.Signal)

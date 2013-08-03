@@ -5,6 +5,8 @@ import (
 	"net/http"
 )
 
+var Version string
+
 func ListenAndServe(addr string) error {
 	http.HandleFunc("/status", statusHandler)
 	http.HandleFunc("/", processErrorHandler(processHandler))
