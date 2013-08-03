@@ -16,6 +16,7 @@ func TestProcessCrop(t *testing.T) {
 	defer f.Close()
 
 	instr := &instructions.RequestInstructions{}
+	instr.Action = "crop"
 	instr.Width = 300
 	instr.Height = 300
 
