@@ -19,12 +19,12 @@ func TestLoad(t *testing.T) {
 	srv := httptest.NewServer(http.FileServer(http.Dir(testDir)))
 	defer srv.Close()
 
-	expected, err := ioutil.ReadFile(filepath.Join(testDir, "image.jpg"))
+	expected, err := ioutil.ReadFile(filepath.Join(testDir, "rectangle.jpg"))
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	reader, err := Load(srv.URL + "/image.jpg")
+	reader, err := Load(srv.URL + "/rectangle.jpg")
 	defer reader.Close()
 	if err != nil {
 		t.Fatal(err)
