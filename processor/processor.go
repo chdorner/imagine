@@ -37,6 +37,8 @@ func (p *Processor) Process(r io.Reader, w io.Writer) error {
 		p.shrinkWidth()
 	}
 
+	p.image.SetFormat(p.instr.Format)
+
 	data, err = p.image.GetImageBlob()
 	if err != nil {
 		return err

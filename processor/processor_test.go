@@ -7,6 +7,8 @@ import (
 	"io/ioutil"
 	"os"
 	"testing"
+	"image/jpeg"
+	"image/png"
 )
 
 func TestProcessCrop(t *testing.T) {
@@ -20,6 +22,7 @@ func TestProcessCrop(t *testing.T) {
 	instr.Action = "crop"
 	instr.Width = 300
 	instr.Height = 300
+	instr.Format = "png"
 
 	p := NewProcessor(instr)
 	b := bytes.NewBuffer(nil)
@@ -52,6 +55,7 @@ func TestProcessShrinkWidth(t *testing.T) {
 	instr := &instructions.RequestInstructions{}
 	instr.Action = "shrink-w"
 	instr.Width = 200
+	instr.Format = "jpg"
 
 	p := NewProcessor(instr)
 	b := bytes.NewBuffer(nil)
@@ -84,6 +88,7 @@ func TestProcessShrinkWidthBigger(t *testing.T) {
 	instr := &instructions.RequestInstructions{}
 	instr.Action = "shrink-w"
 	instr.Width = 500
+	instr.Format = "jpg"
 
 	p := NewProcessor(instr)
 	b := bytes.NewBuffer(nil)
@@ -103,5 +108,51 @@ func TestProcessShrinkWidthBigger(t *testing.T) {
 
 	if actual.Width() != 400 || actual.Height() != 600 {
 		t.Fatalf("width shrinked image should not have changed, got: %dx%d", actual.Width(), actual.Height())
+	}
+}
+
+func TestProcessFormatPNG(t *testing.T) {
+	f, err := os.Open("../test/square.jpg")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer f.Close()
+
+	instr := &instructions.RequestInstructions{}
+	instr.Action = "crop"
+	instr.Width = 200
+	instr.Height = 200
+	instr.Format = "png"
+
+	p := NewProcessor(instr)
+	b := bytes.NewBuffer(nil)
+	p.Process(f, b)
+
+	_, err = png.Decode(b)
+	if err != nil {
+		t.Fatal("processed file is not a png")
+	}
+}
+
+func TestProcessFormatJPG(t *testing.T) {
+	f, err := os.Open("../test/square.png")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer f.Close()
+
+	instr := &instructions.RequestInstructions{}
+	instr.Action = "crop"
+	instr.Width = 200
+	instr.Height = 200
+	instr.Format = "jpg"
+
+	p := NewProcessor(instr)
+	b := bytes.NewBuffer(nil)
+	p.Process(f, b)
+
+	_, err = jpeg.Decode(b)
+	if err != nil {
+		t.Fatal("processed file is not a jpg")
 	}
 }
