@@ -7,6 +7,7 @@ import (
 	"net/http/httptest"
 	"os"
 	"path/filepath"
+	"regexp"
 	"testing"
 )
 
@@ -24,7 +25,9 @@ func TestLoad(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	reader, err := Load(srv.URL + "/rectangle.jpg")
+	originLoader := NewLoader([]*regexp.Regexp{regexp.MustCompile(".*")})
+
+	reader, err := originLoader.Load(srv.URL + "/rectangle.jpg")
 	defer reader.Close()
 	if err != nil {
 		t.Fatal(err)

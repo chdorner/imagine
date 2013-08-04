@@ -33,7 +33,7 @@ func main() {
 	go handleSignals(sigch)
 	signal.Notify(sigch)
 
-	log.Fatal(server.ListenAndServe(addr))
+	log.Fatal(server.ListenAndServe(addr, oWhitelist.slice))
 }
 
 func handleSignals(sigch chan os.Signal) {
