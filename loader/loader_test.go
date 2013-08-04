@@ -20,7 +20,7 @@ func TestLoad(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	originLoader := NewLoader([]*regexp.Regexp{regexp.MustCompile(`.*`)})
+	originLoader := NewLoader([]*regexp.Regexp{regexp.MustCompile(`.*`)}, "disabled")
 
 	reader, err := originLoader.Load(srv.URL + "/rectangle.jpg")
 	defer reader.Close()
@@ -38,8 +38,8 @@ func TestLoad(t *testing.T) {
 	}
 }
 
-func TestLoadInvalidUrl (t *testing.T) {
-	l := NewLoader([]*regexp.Regexp{regexp.MustCompile(`.*`)})
+func TestLoadInvalidUrl(t *testing.T) {
+	l := NewLoader([]*regexp.Regexp{regexp.MustCompile(`.*`)}, "disabled")
 
 	_, err := l.Load("test.png")
 	if _, ok := err.(*InvalidOriginError); !ok {
@@ -52,8 +52,8 @@ func TestLoadInvalidUrl (t *testing.T) {
 	}
 }
 
-func TestLoadNotAllowed (t *testing.T) {
-	l := NewLoader([]*regexp.Regexp{regexp.MustCompile(`example\.com`)})
+func TestLoadNotAllowed(t *testing.T) {
+	l := NewLoader([]*regexp.Regexp{regexp.MustCompile(`example\.com`)}, "disabled")
 
 	_, err := l.Load("http://example2.com/test.png")
 	if _, ok := err.(*HostNotAllowedError); !ok {
@@ -61,12 +61,12 @@ func TestLoadNotAllowed (t *testing.T) {
 	}
 }
 
-func TestNotFound (t *testing.T) {
+func TestNotFound(t *testing.T) {
 	testDir := "../test"
 	srv := httptest.NewServer(http.FileServer(http.Dir(testDir)))
 	defer srv.Close()
 
-	l := NewLoader([]*regexp.Regexp{regexp.MustCompile(`.*`)})
+	l := NewLoader([]*regexp.Regexp{regexp.MustCompile(`.*`)}, "disabled")
 
 	_, err := l.Load(srv.URL + "/notfound.png")
 	if _, ok := err.(*NotFoundError); !ok {

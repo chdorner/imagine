@@ -10,6 +10,7 @@ import (
 
 type Loader struct {
 	whitelist []*regexp.Regexp
+	cache     string
 }
 
 type HostNotAllowedError struct {
@@ -36,8 +37,8 @@ func (e InvalidOriginError) Error() string {
 	return fmt.Sprintf("origin %s is not a valid url", e.Url)
 }
 
-func NewLoader(whitelist []*regexp.Regexp) *Loader {
-	return &Loader{whitelist}
+func NewLoader(whitelist []*regexp.Regexp, cache string) *Loader {
+	return &Loader{whitelist, cache}
 }
 
 func (l *Loader) Load(u string) (io.ReadCloser, error) {

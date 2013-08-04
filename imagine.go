@@ -18,6 +18,7 @@ var (
 	daddr      string
 	version    bool
 	oWhitelist originWhitelist
+	oCacheDir  string
 )
 
 type originWhitelist struct {
@@ -33,7 +34,11 @@ func main() {
 	go handleSignals(sigch)
 	signal.Notify(sigch)
 
-	log.Fatal(server.ListenAndServe(addr, oWhitelist.slice))
+	c := &server.Config{}
+	c.Addr = addr
+	c.OriginWhitelist = oWhitelist.slice
+	c.OriginCacheDir = oCacheDir
+	log.Fatal(server.ListenAndServe(c))
 }
 
 func handleSignals(sigch chan os.Signal) {
@@ -52,6 +57,7 @@ func init() {
 	flag.StringVar(&daddr, "debug.a", ":8081", "address to bind to for debug information")
 	flag.BoolVar(&version, "version", false, "print version and exit")
 	flag.Var(&oWhitelist, "o", "origin whitelist regex (may be used multiple times)")
+	flag.StringVar(&oCacheDir, "c", "disabled", "origin cache directory")
 	flag.Parse()
 }
 
