@@ -46,13 +46,7 @@ func (l *Loader) Load(u string) (io.ReadCloser, error) {
 		return nil, &InvalidOriginError{u}
 	}
 
-	allowed := false
-	for _, r := range l.whitelist {
-		if r.MatchString(originUrl.Host) {
-			allowed = true
-			break
-		}
-	}
+	allowed := l.isAllowed(originUrl)
 	if !allowed {
 		return nil, &HostNotAllowedError{originUrl.Host}
 	}
@@ -65,4 +59,20 @@ func (l *Loader) Load(u string) (io.ReadCloser, error) {
 	}
 
 	return resp.Body, nil
+}
+
+func (l *Loader) isAllowed(u *url.URL) bool {
+	if len(l.whitelist) == 0 {
+		return true
+	}
+
+	allowed := false
+	for _, r := range l.whitelist {
+		if r.MatchString(u.Host) {
+			allowed = true
+			break
+		}
+	}
+
+	return allowed
 }
