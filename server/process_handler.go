@@ -2,6 +2,7 @@ package server
 
 import (
 	"github.com/chdorner/imagine/instructions"
+	"github.com/chdorner/imagine/loader"
 	"github.com/chdorner/imagine/processor"
 	"mime"
 	"net/http"
@@ -16,7 +17,16 @@ func processHandler(w http.ResponseWriter, r *http.Request) {
 
 	p := processor.NewProcessor(instr)
 
-	originReader, _ := originLoader.Load(instr.Origin)
+	originReader, err := originLoader.Load(instr.Origin)
+	if err != nil {
+		var httpErr *httpError
+		if serr, ok := err.(*loader.HostNotAllowedError); ok {
+			httpErr = &httpError{serr, http.StatusBadRequest}
+		} else if serr, ok := err.(*loader.NotFoundError); ok {
+			httpErr = &httpError{serr, http.StatusNotFound}
+		}
+		panic(httpErr)
+	}
 	defer originReader.Close()
 
 	mimetype := mime.TypeByExtension("." + instr.Format)
