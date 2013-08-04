@@ -2,6 +2,7 @@ package loader
 
 import (
 	"fmt"
+	"github.com/chdorner/imagine/filecache"
 	"io"
 	"net/http"
 	"net/url"
@@ -10,7 +11,7 @@ import (
 
 type Loader struct {
 	whitelist []*regexp.Regexp
-	cache     string
+	cache     *filecache.FileCache
 }
 
 type HostNotAllowedError struct {
@@ -38,7 +39,11 @@ func (e InvalidOriginError) Error() string {
 }
 
 func NewLoader(whitelist []*regexp.Regexp, cache string) *Loader {
-	return &Loader{whitelist, cache}
+	var fc *filecache.FileCache
+	if cache != "disabled" && cache != "" {
+		fc = filecache.NewFileCache(cache)
+	}
+	return &Loader{whitelist, fc}
 }
 
 func (l *Loader) Load(u string) (io.ReadCloser, error) {
@@ -52,6 +57,25 @@ func (l *Loader) Load(u string) (io.ReadCloser, error) {
 		return nil, &HostNotAllowedError{originUrl.Host}
 	}
 
+	if l.cache == nil {
+		return l.download(u)
+	}
+
+	if l.cache.IsCached(u) {
+		return l.cache.Open(u)
+	} else {
+		r, err := l.download(u)
+		if err != nil {
+			return nil, err
+		}
+
+		l.cache.Write(u, r)
+		r, _ = l.cache.Open(u)
+		return r, nil
+	}
+}
+
+func (l *Loader) download(u string) (io.ReadCloser, error) {
 	resp, err := http.Get(u)
 	if err != nil {
 		return nil, err
