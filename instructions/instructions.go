@@ -50,7 +50,7 @@ func (i *RequestInstructions) validate() error {
 	}
 
 	originUrl, err := url.ParseRequestURI(i.Origin)
-	if err != nil || originUrl.Host == "" || originUrl.Scheme == ""{
+	if err != nil || originUrl.Host == "" || originUrl.Scheme == "" {
 		return errors.New("origin is not a valid url")
 	}
 

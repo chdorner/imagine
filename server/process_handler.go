@@ -4,8 +4,8 @@ import (
 	"github.com/chdorner/imagine/instructions"
 	"github.com/chdorner/imagine/loader"
 	"github.com/chdorner/imagine/processor"
-	"net/http"
 	"mime"
+	"net/http"
 )
 
 func processHandler(w http.ResponseWriter, r *http.Request) {

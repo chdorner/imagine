@@ -4,11 +4,11 @@ import (
 	"bytes"
 	"github.com/chdorner/imagine/instructions"
 	"github.com/gosexy/canvas"
+	"image/jpeg"
+	"image/png"
 	"io/ioutil"
 	"os"
 	"testing"
-	"image/jpeg"
-	"image/png"
 )
 
 func TestProcessCrop(t *testing.T) {
