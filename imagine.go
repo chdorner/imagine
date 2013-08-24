@@ -4,13 +4,14 @@ import (
 	_ "expvar"
 	"flag"
 	"fmt"
-	"github.com/chdorner/imagine/server"
 	"log"
 	"os"
 	"os/signal"
 	"regexp"
 	"strings"
 	"syscall"
+
+	"github.com/chdorner/imagine/server"
 )
 
 var (

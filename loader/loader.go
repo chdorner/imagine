@@ -2,11 +2,12 @@ package loader
 
 import (
 	"fmt"
-	"github.com/chdorner/imagine/filecache"
 	"io"
 	"net/http"
 	"net/url"
 	"regexp"
+
+	"github.com/chdorner/imagine/filecache"
 )
 
 type Loader struct {

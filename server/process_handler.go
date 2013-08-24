@@ -1,11 +1,12 @@
 package server
 
 import (
+	"mime"
+	"net/http"
+
 	"github.com/chdorner/imagine/instructions"
 	"github.com/chdorner/imagine/loader"
 	"github.com/chdorner/imagine/processor"
-	"mime"
-	"net/http"
 )
 
 func processHandler(w http.ResponseWriter, r *http.Request) {

@@ -1,10 +1,11 @@
 package server
 
 import (
-	"github.com/chdorner/imagine/loader"
 	"log"
 	"net/http"
 	"regexp"
+
+	"github.com/chdorner/imagine/loader"
 )
 
 var Version string

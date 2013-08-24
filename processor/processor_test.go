@@ -2,13 +2,14 @@ package processor
 
 import (
 	"bytes"
-	"github.com/chdorner/imagine/instructions"
-	"github.com/gosexy/canvas"
 	"image/jpeg"
 	"image/png"
 	"io/ioutil"
 	"os"
 	"testing"
+
+	"github.com/chdorner/imagine/instructions"
+	"github.com/gosexy/canvas"
 )
 
 func TestProcessCrop(t *testing.T) {

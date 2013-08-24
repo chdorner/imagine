@@ -1,11 +1,12 @@
 package processor
 
 import (
-	"github.com/chdorner/imagine/instructions"
-	"github.com/gosexy/canvas"
 	"io"
 	"io/ioutil"
 	"math"
+
+	"github.com/chdorner/imagine/instructions"
+	"github.com/gosexy/canvas"
 )
 
 type Processor struct {
